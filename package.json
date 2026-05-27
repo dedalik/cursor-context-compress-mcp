@@ -1,0 +1,60 @@
+{
+  "name": "cursor-context-compress-mcp",
+  "version": "1.0.0",
+  "description": "Cursor Context Compress MCP - dual-engine compression (RTK + Claw) for Cursor",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "cursor",
+    "mcp",
+    "rtk",
+    "claw-compactor",
+    "token-compression",
+    "context-window",
+    "plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radiks/cursor-context-compress-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/radiks/cursor-context-compress-mcp/issues"
+  },
+  "homepage": "https://github.com/radiks/cursor-context-compress-mcp#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "cursor-context-compress-mcp": "./dist/index.js",
+    "cursor-context-compress-mcp-doctor": "./scripts/doctor.mjs",
+    "cursor-context-compress-mcp-stats": "./scripts/cursor-context-compress-mcp-stats.mjs"
+  },
+  "files": [
+    "dist",
+    "scripts/claw_bridge.py",
+    "scripts/doctor.mjs",
+    "scripts/cursor-context-compress-mcp-stats.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run test/mcp",
+    "doctor": "node scripts/doctor.mjs",
+    "stats": "node scripts/cursor-context-compress-mcp-stats.mjs",
+    "validate:plugin": "node scripts/validate-plugin.mjs",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

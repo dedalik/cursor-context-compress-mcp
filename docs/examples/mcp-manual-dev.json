@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cursor-context-compress-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/dist/index.js"],
+      "env": {
+        "RTK_WORKSPACE": "${workspaceFolder}"
+      }
+    }
+  }
+}

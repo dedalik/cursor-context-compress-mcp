@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Cursor Context Compress MCP">
+  <rect width="128" height="128" rx="24" fill="#0f172a"/>
+  <path d="M32 44h48v8H48v24h24v8H32V44z" fill="#38bdf8"/>
+  <path d="M88 76l-20 20-8-8 20-20 8 8z" fill="#22d3ee"/>
+  <path d="M36 88h12v8H36z" fill="#94a3b8"/>
+  <path d="M52 88h8v8h-8z" fill="#64748b"/>
+  <path d="M64 88h6v8h-6z" fill="#475569"/>
+</svg>

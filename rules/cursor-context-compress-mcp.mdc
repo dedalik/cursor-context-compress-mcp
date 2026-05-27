@@ -1,0 +1,37 @@
+---
+description: Route compression work to Cursor Context Compress MCP tools (RTK + Claw)
+alwaysApply: false
+---
+
+# Cursor Context Compress MCP
+
+When the **cursor-context-compress-mcp** plugin is enabled, prefer these MCP tools over raw Shell/Read/Grep for the same tasks.
+
+## Tool routing
+
+| Task | Tool |
+|------|------|
+| `git status`, `git diff`, `git log`, commits | `rtk_git` |
+| Read file with RTK filtering | `rtk_read` |
+| List / grep / find | `rtk_ls`, `rtk_grep`, `rtk_find` |
+| Shell command output | `rtk_shell` |
+| Compress arbitrary text / JSON | `claw_compress_text` |
+| Compress chat / message history | `claw_compress_messages` |
+| Restore Claw-compressed section | `claw_rewind` |
+| RTK-only savings report | `rtk_gain` |
+| **Both engines - savings dashboard** | `compress_stats` |
+| Token estimate only | `rtk_count_tokens` |
+| Workspace compression estimate | `claw_workspace_benchmark` |
+
+## Token savings
+
+When the user asks about **token savings**, **gain**, **stats**, or **how much we saved**:
+
+- Call `compress_stats` with `engines: all` and `scope: project` when working in a project workspace.
+- Or use command `/cursor-context-compress-mcp-stats`.
+
+Do not duplicate RTK hooks and MCP for the same shell command.
+
+## Setup
+
+If tools fail with "not found", run `/cursor-context-compress-mcp-doctor` or skill `cursor-context-compress-mcp-setup` - do not install RTK/Claw without user consent.

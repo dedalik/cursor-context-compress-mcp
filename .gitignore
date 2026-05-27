@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Logs & env
+*.log
+npm-debug.log*
+.env
+.env.*
+!.env.example
+
+# OS & editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Package artifacts
+*.tgz
+
+# Cursor local (user-specific; not part of the plugin bundle)
+.cursor/plugins/
+
+# Vitest cache
+node_modules/.vite/

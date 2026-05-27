@@ -1,0 +1,22 @@
+{
+  "name": "cursor-context-compress-mcp",
+  "displayName": "Cursor Context Compress MCP",
+  "version": "1.0.0",
+  "description": "Cursor Context Compress MCP - dual-engine token compression: RTK for command output, Claw Compactor for text and messages. MCP via npx, unified savings stats.",
+  "author": {
+    "name": "cursor-context-compress-mcp contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cursor",
+    "cursor-context-compress-mcp",
+    "rtk",
+    "token-compression",
+    "mcp",
+    "claw-compactor",
+    "context"
+  ],
+  "logo": "assets/logo.svg",
+  "repository": "https://github.com/radiks/cursor-context-compress-mcp",
+  "homepage": "https://github.com/radiks/cursor-context-compress-mcp#readme"
+}

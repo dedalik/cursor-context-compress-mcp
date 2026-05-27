@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cursor-context-compress-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "cursor-context-compress-mcp"],
+      "env": {
+        "RTK_WORKSPACE": "${workspaceFolder}"
+      }
+    }
+  }
+}
