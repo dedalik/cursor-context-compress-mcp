@@ -5,7 +5,9 @@
       "command": "node",
       "args": ["${workspaceFolder}/dist/index.js"],
       "env": {
-        "RTK_WORKSPACE": "${workspaceFolder}"
+        "RTK_WORKSPACE": "${workspaceFolder}",
+        "CLAW_AUTO_ALL": "1",
+        "CLAW_PIPELINE_THRESHOLD": "1"
       }
     }
   }

@@ -46,6 +46,9 @@
     "doctor": "node scripts/doctor.mjs",
     "stats": "node scripts/cursor-context-compress-mcp-stats.mjs",
     "validate:plugin": "node scripts/validate-plugin.mjs",
+    "plugin:mcp-json": "node scripts/write-plugin-mcp-json.mjs",
+    "plugin:install-hooks": "node scripts/install-cursor-hooks.mjs",
+    "plugin:sync": "npm run build && rsync -a --delete ./ \"$HOME/.cursor/plugins/local/cursor-context-compress-mcp/\" && npm run plugin:mcp-json",
     "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {

@@ -43,7 +43,7 @@ export async function fetchRtkGainReport(options: {
   } catch (err) {
     if (err instanceof RtkNotFoundError) {
       return {
-        body: `${err.message}\n\nInstall RTK: brew install rtk - or use skill cursor-context-compress-mcp-setup.`,
+        body: `${err.message}\n\nInstall RTK: brew install rtk - or use skill compress-setup.`,
         exitCode: 1,
         isError: true,
         missing: true,

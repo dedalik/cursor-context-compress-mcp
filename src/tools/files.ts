@@ -3,6 +3,7 @@ import { z } from "zod";
 import path from "node:path";
 import { runRtk, RtkNotFoundError } from "../rtk/runner.js";
 import { applyClawPipeline, formatRtkBody } from "../engines/router.js";
+import { isAutoClawEnabled } from "../engines/thresholds.js";
 import { mcpTextResult, type CompressionEngine } from "../formatToolResult.js";
 import { estimateTokens } from "../tokenCounter.js";
 import type { AppDeps } from "../deps.js";
@@ -56,8 +57,13 @@ export function registerFiles(server: McpServer, deps: AppDeps): void {
       let reductionPct: number | undefined;
       let markers: number | undefined;
 
-      if (post_compress && deps.capabilities.claw) {
-        const piped = await applyClawPipeline(body, true);
+      const shouldPipeline = (post_compress || isAutoClawEnabled()) && deps.capabilities.claw;
+      if (shouldPipeline) {
+        const piped = await applyClawPipeline(body, true, {
+          workspace: deps.workspace,
+          tool: "rtk_read",
+          op: "pipeline_read",
+        });
         body = piped.body;
         engine = piped.engine;
         reductionPct = piped.reductionPct;
@@ -96,10 +102,26 @@ export function registerFiles(server: McpServer, deps: AppDeps): void {
         }, true);
       }
       const result = await runRtk(["ls", safe, ...flags], { cwd: deps.workspace });
-      const body = formatRtkBody(result);
+      let body = formatRtkBody(result);
+      let engine: CompressionEngine = "rtk";
+      let reductionPct: number | undefined;
+      let markers: number | undefined;
+      if (deps.capabilities.claw && isAutoClawEnabled()) {
+        const piped = await applyClawPipeline(body, true, {
+          workspace: deps.workspace,
+          tool: "rtk_ls",
+          op: "pipeline_ls",
+        });
+        body = piped.body;
+        engine = piped.engine;
+        reductionPct = piped.reductionPct;
+        markers = piped.markers;
+      }
       return mcpTextResult(body, {
-        engine: "rtk",
+        engine,
         compressedTokens: estimateTokens(body),
+        reductionPct,
+        markers,
         exitCode: result.exitCode,
         command: result.commandLine,
       }, result.exitCode !== 0);
@@ -130,10 +152,26 @@ export function registerFiles(server: McpServer, deps: AppDeps): void {
         ["grep", pattern, safe, ...extra_args],
         { cwd: deps.workspace }
       );
-      const body = formatRtkBody(result);
+      let body = formatRtkBody(result);
+      let engine: CompressionEngine = "rtk";
+      let reductionPct: number | undefined;
+      let markers: number | undefined;
+      if (deps.capabilities.claw && isAutoClawEnabled()) {
+        const piped = await applyClawPipeline(body, true, {
+          workspace: deps.workspace,
+          tool: "rtk_grep",
+          op: "pipeline_grep",
+        });
+        body = piped.body;
+        engine = piped.engine;
+        reductionPct = piped.reductionPct;
+        markers = piped.markers;
+      }
       return mcpTextResult(body, {
-        engine: "rtk",
+        engine,
         compressedTokens: estimateTokens(body),
+        reductionPct,
+        markers,
         exitCode: result.exitCode,
         command: result.commandLine,
       }, result.exitCode !== 0);
@@ -152,10 +190,26 @@ export function registerFiles(server: McpServer, deps: AppDeps): void {
     async ({ args }) => {
       if (!deps.capabilities.rtk) return rtkMissing();
       const result = await runRtk(["find", ...args], { cwd: deps.workspace });
-      const body = formatRtkBody(result);
+      let body = formatRtkBody(result);
+      let engine: CompressionEngine = "rtk";
+      let reductionPct: number | undefined;
+      let markers: number | undefined;
+      if (deps.capabilities.claw && isAutoClawEnabled()) {
+        const piped = await applyClawPipeline(body, true, {
+          workspace: deps.workspace,
+          tool: "rtk_find",
+          op: "pipeline_find",
+        });
+        body = piped.body;
+        engine = piped.engine;
+        reductionPct = piped.reductionPct;
+        markers = piped.markers;
+      }
       return mcpTextResult(body, {
-        engine: "rtk",
+        engine,
         compressedTokens: estimateTokens(body),
+        reductionPct,
+        markers,
         exitCode: result.exitCode,
         command: result.commandLine,
       }, result.exitCode !== 0);

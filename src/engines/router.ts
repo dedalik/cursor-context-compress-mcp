@@ -3,6 +3,7 @@ import { runClaw } from "../claw/runner.js";
 import type { RtkRunResult } from "../rtk/runner.js";
 import { shouldRunClawPipeline } from "./thresholds.js";
 import type { CompressionEngine } from "../formatToolResult.js";
+import { recordClawOperation } from "../stats/recordClawStats.js";
 
 export interface PipelineResult {
   body: string;
@@ -13,14 +14,17 @@ export interface PipelineResult {
 
 export async function applyClawPipeline(
   rtkOutput: string,
-  postCompress: boolean
+  postCompress: boolean,
+  stats?: { workspace: string; tool: string; op?: string }
 ): Promise<PipelineResult> {
   if (!shouldRunClawPipeline(rtkOutput, postCompress)) {
     return { body: rtkOutput, engine: "rtk" };
   }
 
   const before = estimateTokens(rtkOutput);
+  const started = performance.now();
   const claw = await runClaw("compress_text", { text: rtkOutput });
+  const durationMs = performance.now() - started;
   if (!claw.ok || !claw.compressed) {
     return { body: rtkOutput, engine: "rtk" };
   }
@@ -28,6 +32,17 @@ export async function applyClawPipeline(
   const after = estimateTokens(claw.compressed);
   const reductionPct = before > 0 ? ((before - after) / before) * 100 : 0;
   const markers = Array.isArray(claw.markers) ? claw.markers.length : 0;
+
+  if (stats) {
+    recordClawOperation({
+      workspace: stats.workspace,
+      op: stats.op ?? "pipeline",
+      tool: stats.tool,
+      stats: claw.stats,
+      durationMs,
+      fallback: { inputTokens: before, outputTokens: after },
+    });
+  }
 
   return {
     body: claw.compressed,

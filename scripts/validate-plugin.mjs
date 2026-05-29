@@ -54,11 +54,13 @@ if (plugin) {
 const mcp = readJson("mcp.json");
 if (mcp?.mcpServers?.[PROJECT_NAME]) {
   const s = mcp.mcpServers[PROJECT_NAME];
-  if (s.command !== "npx") fail("mcp.json should use npx for Marketplace");
-  else ok("mcp.json uses npx");
   const args = s.args ?? [];
-  if (!args.includes(PROJECT_NAME)) {
-    fail(`mcp.json args should include ${PROJECT_NAME}`);
+  if (s.command === "npx" && args.includes(PROJECT_NAME)) {
+    ok("mcp.json uses npx (publishable template)");
+  } else {
+    fail(
+      "mcp.json should use npx -y cursor-context-compress-mcp (not local absolute paths)"
+    );
   }
 } else {
   fail(`mcp.json missing ${PROJECT_NAME} server`);
@@ -71,37 +73,18 @@ if (pkg && plugin && pkg.version !== plugin.version) {
   ok(`version sync: ${pkg.version}`);
 }
 
-for (const skillDir of [
-  "skills/cursor-context-compress-mcp-setup",
-  "skills/cursor-context-compress-mcp-stats",
-]) {
-  const skillPath = path.join(root, skillDir, "SKILL.md");
-  if (!fs.existsSync(skillPath)) {
-    fail(`Missing ${skillDir}/SKILL.md`);
-  } else {
-    const text = fs.readFileSync(skillPath, "utf8");
-    if (!text.startsWith("---")) fail(`${skillDir}/SKILL.md missing frontmatter`);
-    else ok(skillDir);
-  }
-}
-
-for (const cmd of [
-  "commands/cursor-context-compress-mcp-doctor.md",
-  "commands/cursor-context-compress-mcp-stats.md",
-]) {
-  if (!fs.existsSync(path.join(root, cmd))) fail(`Missing ${cmd}`);
-  else ok(cmd);
-}
-
-const rulesFile = "rules/cursor-context-compress-mcp.mdc";
-if (!fs.existsSync(path.join(root, rulesFile))) {
-  fail(`Missing ${rulesFile}`);
-} else {
-  ok(rulesFile);
-}
-
 if (!fs.existsSync(path.join(root, "LICENSE"))) fail("Missing LICENSE");
 else ok("LICENSE");
+
+const hookScript = path.join(root, "scripts", "claw-post-tool-hook.mjs");
+if (!fs.existsSync(hookScript)) fail("Missing scripts/claw-post-tool-hook.mjs");
+else ok("scripts/claw-post-tool-hook.mjs");
+
+if (!fs.existsSync(path.join(root, "dist", "index.js"))) {
+  fail("dist/index.js missing - run npm run build");
+} else {
+  ok("dist/index.js");
+}
 
 if (errors > 0) {
   console.error(`\n${errors} validation error(s)`);

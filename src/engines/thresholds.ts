@@ -18,3 +18,8 @@ export function shouldRunClawPipeline(
   if (!postCompress) return false;
   return estimateTokens(text) >= getPipelineThreshold();
 }
+
+export function isAutoClawEnabled(): boolean {
+  const raw = process.env.CLAW_AUTO_ALL?.trim().toLowerCase();
+  return raw === "1" || raw === "true" || raw === "yes";
+}

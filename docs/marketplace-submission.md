@@ -10,7 +10,6 @@
 - [x] `.cursor-plugin/plugin.json` - name `cursor-context-compress-mcp`
 - [x] Logo - `assets/logo.svg`
 - [x] `mcp.json` - stdio + `npx -y cursor-context-compress-mcp`
-- [x] Rules, skills, commands
 - [x] `CHANGELOG.md`
 - [x] `repository` / `homepage` in `plugin.json` (update GitHub username if forked)
 - [ ] `npm publish` package `cursor-context-compress-mcp`
